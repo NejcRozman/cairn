@@ -41,6 +41,7 @@ export interface Project {
   reproducibilities: ProofOfReproducibility[];
   fundingGoal?: number;
   fundingPool: number;
+  fundingPrice: number;
   impactScore: number;
   outputs: Output[];
   reproducibilityRequirements: string[];

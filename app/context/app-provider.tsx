@@ -43,12 +43,12 @@ interface AppContextType {
     reproducibilityData: ProofOfReproducibility
   ) => void;
   handleAddProject: (project: Project) => void;
-  handleAddOutputs: (projectId: string, outputs: Output[]) => Project;
+  handleAddOutputs: (projectId: string, outputs: Output[], price?: number) => Project;
   handleDispute: (projectId: string, reproducibilityId: string) => void;
   handleInstantFund: (projectId: string, amount: number) => void;
   fundingHistory: FundingEvent[];
 
-  // Auth
+  // Auth  & Navigation
   connectedWallet: string | null;
   setConnectedWallet: React.Dispatch<React.SetStateAction<string | null>>;
   isAuthenticated: boolean;
@@ -57,6 +57,9 @@ interface AppContextType {
   isOnboardingModalOpen: boolean;
   completeOnboarding: () => void;
   closeOnboardingModal: () => void;
+  forceShowLanding: boolean;
+  goToLandingPage: () => void;
+  enterApp: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -68,8 +71,11 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [fundingHistory, setFundingHistory] =
     useState<FundingEvent[]>(MOCK_FUNDING_HISTORY);
   const [toasts, setToasts] = useState<ToastInfo[]>([]);
+
+  // Auth & Navigation State
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
   const [connectedWallet, setConnectedWallet] = useState<string | null>(null);
+  const [forceShowLanding, setForceShowLanding] = useState(false);
 
   const setIsDarkMode = (dark: boolean) => {
     setIsDarkModeState(dark);
@@ -91,6 +97,86 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setIsDarkMode(false);
   }, []);
 
+  const connectWallet = async (role: UserRole = UserRole.Scientist) => {
+    setForceShowLanding(false);
+    // If MetaMask is not installed, simulate a connection for development.
+    if (typeof (window as any).ethereum === 'undefined') {
+      console.warn("MetaMask not found. Simulating wallet connection for development.");
+      const mockAccount = CURRENT_USER_WALLET; // Use the main mock wallet address
+
+      setConnectedWallet(mockAccount);
+
+      // Find or create a user profile for the mock account
+      let userProfile = MOCK_USERS.find(u => u.walletAddress.toLowerCase() === mockAccount.toLowerCase());
+      if (!userProfile) {
+        userProfile = {
+          walletAddress: mockAccount,
+          name: `Mock User (${mockAccount.substring(0, 6)}...)`,
+          porContributedCount: 0,
+          isVerified: false,
+        };
+      }
+
+      setCurrentUser(userProfile);
+      setUserRole(role);
+      setIsDarkMode(false); // Default to light mode for the app
+      addToast(`Wallet connected (mock): ${mockAccount.substring(0, 6)}...`, 'success');
+
+    }
+
+    // Original logic for when MetaMask is present
+    try {
+      const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
+      const account = accounts[0];
+
+      if (account) {
+        setConnectedWallet(account);
+
+        let userProfile = MOCK_USERS.find(u => u.walletAddress.toLowerCase() === account.toLowerCase());
+
+        if (!userProfile) {
+          userProfile = {
+            walletAddress: account,
+            name: `New User (${account.substring(0, 6)}...)`,
+            porContributedCount: 0,
+            isVerified: false,
+          };
+        }
+
+        setCurrentUser(userProfile);
+        setUserRole(role);
+        setIsDarkMode(false); // Default to light mode for the app
+
+        addToast(`Wallet connected: ${account.substring(0, 6)}...`, 'success');
+
+        const isVerifiedInStorage = localStorage.getItem(`cairn_verified_${account}`) === 'true';
+      }
+    } catch (error) {
+      console.error("Failed to connect wallet:", error);
+      addToast('Failed to connect wallet. Please try again.', 'error');
+    }
+  };
+
+  const disconnectWallet = () => {
+    setConnectedWallet(null);
+    setCurrentUser(null);
+    setUserRole(UserRole.Scientist);
+    setForceShowLanding(false);
+
+    // Revert to dark mode for landing page
+    setIsDarkMode(true);
+
+    addToast("Wallet disconnected.", 'info');
+  };
+
+  const goToLandingPage = () => {
+    setForceShowLanding(true);
+  };
+
+  const enterApp = () => {
+    setForceShowLanding(false);
+  }
+
   const dismissToast = useCallback((id: number) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
@@ -111,7 +197,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     addToast("Project created successfully!", "success");
   };
 
-  const handleAddOutputs = (projectId: string, outputs: Output[]): Project => {
+  const handleAddOutputs = (projectId: string, outputs: Output[], price: number): Project => {
     let updatedProject: Project | undefined;
     let wasDraftAndOwned = false;
 
@@ -133,6 +219,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
           outputs: outputs, // Set outputs as a one-time action, not additive
           status: newStatus,
           lastOutputDate: latestTimestamp,
+          fundingPrice: price !== undefined ? price : p.fundingPrice,
         };
         return updatedProject;
       }
@@ -152,7 +239,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     } else {
       addToast(`${outputs.length} output(s) recorded successfully!`, "success");
     }
-
+    if (price !== undefined) {
+      addToast(`Funding price set to $${price}.`, 'info');
+ }
     return updatedProject!;
   };
 
@@ -280,6 +369,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     isAuthenticated,
     connectedWallet,
     setConnectedWallet,
+    forceShowLanding,
+    goToLandingPage,
+    enterApp,
   };
 
   return (

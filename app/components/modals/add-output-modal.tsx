@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useState, useRef, useEffect, ComponentProps, memo } from "react";
@@ -199,6 +197,16 @@ export const AddOutputModal = ({ project, onClose, onAddOutputs }: { project: Pr
 
     const modalFooter = (
         <div className="space-y-4">
+             <div className="mt-6 border-t border-border dark:border-border-dark pt-6">
+                 <label className="block text-sm font-medium text-text-secondary dark:text-text-dark-secondary mb-1">Set Funding Price (USD)</label>
+                <FormInput 
+                    type="number" 
+                    placeholder="e.g., 500" 
+                    value={price} 
+                    onChange={(e) => setPrice(e.target.value)} 
+                />
+                <p className="text-xs text-text-secondary dark:text-text-dark-secondary mt-1">Set a price for a single funding action on your project. This can be updated later.</p>
+            </div>
             <div className="flex items-start p-3 text-sm rounded-lg bg-status-warning-bg text-status-warning dark:bg-status-warning-bg-dark/50 ring-1 ring-inset ring-status-warning/20">
                 <AlertTriangleIcon className="w-6 h-6 mr-3 flex-shrink-0 mt-0.5" />
                 <div>

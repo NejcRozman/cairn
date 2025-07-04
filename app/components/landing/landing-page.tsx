@@ -83,7 +83,7 @@ const LandingHeader = ({
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-8">
           <a
-            href="#features-researchers"
+            href="cairn/app/components/landing#features-researchers"
             onClick={(e) => {
               e.preventDefault();
               scrollToSection("features-researchers");
@@ -93,7 +93,7 @@ const LandingHeader = ({
             For Researchers
           </a>
           <a
-            href="#features-funders"
+            href="cairn/app/components/landing#features-funders"
             onClick={(e) => {
               e.preventDefault();
               scrollToSection("features-funders");
@@ -103,7 +103,7 @@ const LandingHeader = ({
             For Funders
           </a>
           <a
-            href="#"
+            href="cairn/app/components/landing#"
             onClick={(e) => {
               e.preventDefault();
               onNavigate("howitworks");
@@ -148,7 +148,7 @@ const LandingHeader = ({
               <div className="-my-6 divide-y divide-cairn-gray-700">
                 <div className="space-y-2 py-6">
                   <a
-                    href="#features-researchers"
+                    href="cairn/app/components/landing#features-researchers"
                     onClick={(e) => {
                       e.preventDefault();
                       scrollToSection("features-researchers");
@@ -158,7 +158,7 @@ const LandingHeader = ({
                     For Researchers
                   </a>
                   <a
-                    href="#features-funders"
+                    href="cairn/app/components/landing#features-funders"
                     onClick={(e) => {
                       e.preventDefault();
                       scrollToSection("features-funders");
@@ -168,7 +168,7 @@ const LandingHeader = ({
                     For Funders
                   </a>
                   <a
-                    href="#"
+                    href="cairn/app/components/landing#"
                     onClick={(e) => {
                       e.preventDefault();
                       handleNavigate("howitworks");
@@ -332,7 +332,7 @@ const HeroSection = () => {
 
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 hidden sm:block">
         <a
-          href="#features-researchers"
+          href="cairn/app/components/landing#features-researchers"
           onClick={(e) => {
             e.preventDefault();
             document
@@ -473,26 +473,26 @@ export const AppFooter = () => (
           aria-label="Footer navigation"
         >
           <a
-            href="#"
+            href="cairn/app/components/landing#"
             className="text-sm font-medium hover:text-text dark:hover:text-white transition-colors"
           >
             Docs
           </a>
           <a
-            href="#"
+            href="cairn/app/components/landing#"
             className="text-sm font-medium hover:text-text dark:hover:text-white transition-colors"
           >
             FAQ
           </a>
           <a
-            href="#"
+            href="cairn/app/components/landing#"
             className="hover:text-text dark:hover:text-white transition-colors"
             aria-label="Twitter"
           >
             <TwitterIcon className="h-5 w-5" />
           </a>
           <a
-            href="#"
+            href="cairn/app/components/landing#"
             className="hover:text-text dark:hover:text-white transition-colors"
             aria-label="GitHub"
           >

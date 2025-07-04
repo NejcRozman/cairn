@@ -223,7 +223,7 @@ const DisputesWidget = ({ projects, currentUser, onViewContributionDetails }: {
 
     return (
         <div className="bg-background-light dark:bg-background-dark-light rounded-xl p-5 border border-border dark:border-border-dark shadow-sm h-full flex flex-col">
-            <h4 className="font-semibold mb-4 text-text dark:text-text-dark flex-shrink-0">My Proof Disputes</h4>
+            <h4 className="font-semibold mb-4 text-text dark:text-text-dark flex-shrink-0">Action Required for your submissions</h4>
             
             <div className="grid grid-cols-1 gap-4 flex-shrink-0">
                 <ActionStatCard
@@ -335,32 +335,46 @@ const ReproducibilityHistoryWidget = ({ projects, currentUser, onViewContributio
             .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
     }, [projects, currentUser.walletAddress]);
 
+    const formatDate = (timestamp: string) => {
+        const d = new Date(timestamp);
+        return `${d.getDate()}. ${d.getMonth() + 1}. ${d.getFullYear()}`;
+    };
+
     return (
-        <div className="bg-background-light dark:bg-background-dark-light rounded-xl p-5 border border-border dark:border-border-dark shadow-sm">
+        <div className="bg-background-light dark:bg-background-dark-light rounded-xl p-6 border border-border dark:border-border-dark shadow-sm h-full flex flex-col">
+            <h2 className="text-2xl font-bold text-text dark:text-text-dark mb-6">Submited PoRs</h2>
             {myContributions.length > 0 ? (
-                <div className="max-h-96 overflow-y-auto">
-                    <ul className="space-y-2 pr-2">
+                <div className="overflow-y-auto flex-grow min-h-0 -mr-3 pr-3">
+                    <ul className="space-y-3">
                         {myContributions.map(r => (
-                            <li key={r.id} className="flex justify-between items-center bg-cairn-gray-100 dark:bg-cairn-gray-800 p-3 rounded-lg">
-                                <div className="flex-grow pr-4">
-                                    <p className="font-semibold text-sm truncate text-text dark:text-text-dark">On: {r.projectTitle}</p>
-                                    <p className="text-xs text-text-secondary dark:text-text-dark-secondary">{new Date(r.timestamp).toLocaleDateString()}</p>
-                                </div>
-                                <div className="flex items-center space-x-3 flex-shrink-0">
-                                    <PoRStatusBadge status={r.status} />
-                                    <button
-                                        onClick={() => onViewContributionDetails(r, r.projectId)}
-                                        className="text-xs bg-primary-light text-primary font-semibold py-1 px-3 rounded-full hover:bg-blue-200/50 transition-colors"
-                                    >
-                                        View
-                                    </button>
+                            <li key={r.id}>S
+                                <div className="w-full text-left bg-cairn-gray-50 dark:bg-cairn-gray-900/50 p-4 rounded-xl">
+                                    <div className="flex justify-between items-center gap-4">S
+                                        <div className="flex-grow">
+                                            <p className="text-sm font-semibold text-text dark:text-text-dark">
+                                                On: {r.projectTitle}
+                                            </p>
+                                            <p className="text-xs text-text-secondary dark:text-text-dark-secondary mt-1">
+                                                {formatDate(r.timestamp)}
+                                            </p>
+                                        </div>
+                                        <div className="flex-shrink-0 flex items-center space-x-4">
+                                            <PoRStatusBadge status={r.status} />
+                                            <button
+                                                onClick={() => onViewContributionDetails(r, r.projectId)}
+                                                className="text-xs font-semibold py-1.5 px-3 rounded-full bg-primary-light text-primary hover:bg-blue-200 dark:bg-primary/20 dark:text-primary-light dark:hover:bg-primary/30 transition-colors"
+                                            >
+                                                View
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </li>
                         ))}
                     </ul>
                 </div>
             ) : (
-                <div className="flex flex-col items-center justify-center text-center py-8">
+                <div className="flex flex-col items-center justify-center text-center flex-grow">
                     <BeakerIcon className="mx-auto h-8 w-8 text-text-secondary" />
                     <p className="mt-3 text-sm font-medium text-text dark:text-text-dark">No contributions yet.</p>
                     <p className="mt-1 text-xs text-text-secondary dark:text-text-dark-secondary">Review projects in the Discover tab to contribute.</p>
@@ -372,42 +386,28 @@ const ReproducibilityHistoryWidget = ({ projects, currentUser, onViewContributio
 
 const MyMetricsWidget = ({ currentUser, totalPorsContributed, porRequirement }: { currentUser: UserProfile, totalPorsContributed: number, porRequirement: number }) => {
     return (
-        <div className="bg-background-light dark:bg-background-dark-light p-6 rounded-xl border border-border dark:border-border-dark flex flex-col h-full">
-            <h4 className="font-semibold mb-4 text-text dark:text-text-dark flex-shrink-0">My Contributions</h4>
-            <div className="flex flex-col space-y-6 flex-grow justify-center">
-                {/* Metric 1: New Project Quota */}
-                <div className="flex items-start space-x-4">
-                    <div className="bg-primary-light dark:bg-primary/20 p-3 rounded-lg flex items-center justify-center">
-                        <CheckCircleIcon className="w-6 h-6 text-primary dark:text-primary-light" />
+        <div className="bg-background-light dark:bg-background-dark-light p-6 rounded-xl border border-border dark:border-border-dark shadow-sm">
+            <h4 className="font-semibold text-lg text-text dark:text-text-dark mb-4">My Metrics</h4>
+            <div className="space-y-4">
+                <div className="flex items-center bg-cairn-gray-50 dark:bg-cairn-gray-900/50 p-4 rounded-xl">
+                    <div className="p-3 bg-white dark:bg-cairn-gray-800 rounded-lg mr-4 shadow-sm">
+                        <CheckCircleIcon className="w-5 h-5 text-primary" />
                     </div>
-                    <div>
-                        <div className="flex items-baseline space-x-2">
-                            <p className="text-3xl font-bold text-text dark:text-text-dark">{`${currentUser.porContributedCount} / ${porRequirement}`}</p>
-                            <div className="flex items-center space-x-1.5">
-                            <p className="text-sm font-medium text-text-secondary dark:text-text-dark-secondary">PoR Quota</p>
-                            <Tooltip text="Review projects and submit enough Proof Of Reproducibility to create new projects.">
-                                    <InfoIcon className="w-4 h-4 text-text-secondary/70 dark:text-text-dark-secondary/70 cursor-help" />
-                            </Tooltip>
-                            </div>
-                        </div>
-                    </div>
+                    <p className="font-bold text-2xl text-text dark:text-text-dark mr-3">{`${currentUser.porContributedCount}/${porRequirement}`}</p>
+                    <p className="text-sm text-text-secondary dark:text-text-dark-secondary flex-grow">PoR Quota</p>
+                    <Tooltip text="Reproduce new scientific research and submit enough Proof Of Reproducibility to create new projects.">
+                        <InfoIcon className="w-4 h-4 text-cairn-gray-400 cursor-help" />
+                    </Tooltip>
                 </div>
-                {/* Metric 2: Total PoRs Submitted */}
-                <div className="flex items-start space-x-4">
-                    <div className="bg-primary-light dark:bg-primary/20 p-3 rounded-lg flex items-center justify-center">
-                        <BeakerIcon className="w-6 h-6 text-primary dark:text-primary-light" />
+                <div className="flex items-center bg-cairn-gray-50 dark:bg-cairn-gray-900/50 p-4 rounded-xl">
+                    <div className="p-3 bg-white dark:bg-cairn-gray-800 rounded-lg mr-4 shadow-sm">
+                        <UploadCloudIcon className="w-5 h-5 text-primary" />
                     </div>
-                    <div>
-                        <div className="flex items-baseline space-x-2">
-                            <p className="text-3xl font-bold text-text dark:text-text-dark">{totalPorsContributed}</p>
-                            <div className="flex items-center space-x-1.5">
-                                <p className="text-sm font-medium text-text-secondary dark:text-text-dark-secondary">Number of PoR Submitted</p>
-                                <Tooltip text="Total amount of your contributions on this platform.">
-                                    <InfoIcon className="w-4 h-4 text-text-secondary/70 dark:text-text-dark-secondary/70 cursor-help" />
-                                </Tooltip>
-                            </div>
-                        </div>
-                    </div>
+                    <p className="font-bold text-2xl text-text dark:text-text-dark mr-3">{totalPorsContributed}</p>
+                    <p className="text-sm text-text-secondary dark:text-text-dark-secondary flex-grow">Number of PoR Submitted</p>
+                    <Tooltip text="Total amount of your contributions on this platform.">
+                        <InfoIcon className="w-4 h-4 text-cairn-gray-400 cursor-help" />
+                    </Tooltip>
                 </div>
             </div>
         </div>
@@ -524,10 +524,9 @@ const FundingDashboard = ({ projects, onSelectProject }: { projects: Project[], 
                                 <th className="p-4 font-semibold">Status</th>
                                 <th className="p-4 font-semibold">First Funded</th>
                                 <th className="p-4 font-semibold">Total Funds</th>
-                                <th className="p-4 font-semibold">Funders</th>
-                                <th className="p-4 font-semibold">Tx Hashes</th>
+                                <th className="p-4 font-semibold">Funder</th>
+                                <th className="p-4 font-semibold">Tx Hash</th>
                                 <th className="p-4 font-semibold">Impact Level</th>
-                                <th className="p-4 font-semibold text-center">Impact Cert</th>
                            </tr>
                         </thead>
                         <tbody className="divide-y divide-border dark:divide-border-dark">
@@ -572,7 +571,7 @@ const FundingDashboard = ({ projects, onSelectProject }: { projects: Project[], 
                                         {txHashes.length > 0 ? (
                                             <div className="flex flex-col space-y-1 items-start">
                                                  {txHashes.slice(0, 2).map(hash => (
-                                                    <a key={hash} href="#" onClick={(e) => e.stopPropagation()} className="text-primary hover:underline" title={hash}>
+                                                    <a key={hash} href="cairn/app/components/dashboard#" onClick={(e) => e.stopPropagation()} className="text-primary hover:underline" title={hash}>
                                                         {hash.substring(0, 8)}...
                                                     </a>
                                                 ))}
@@ -654,20 +653,16 @@ export function ScientistDashboard({ projects, onSelectProject, onNewProject, cu
     } else if (activePage === 'discover') {
         content = (
             <div className="space-y-8">
-                <PageHeader title="Discover & PoR" subtitle="Contribute to the community by reviewing projects and find new research." />
+                <PageHeader title="Discover & Reproduce" subtitle="Explore new research projects and contribute to the community by providing Proofs Of Reproducibility (PoR)." />
                 
                 {/* Section 1: My Metrics & Disputes */}
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
                     {/* Title "My Community Standing" removed as per request */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <MyMetricsWidget currentUser={currentUser} totalPorsContributed={totalPorsContributed} porRequirement={porRequirement} />
+                    <div className="flex flex-col gap-8">
                         <DisputesWidget projects={projects} currentUser={currentUser} onViewContributionDetails={onViewContributionDetails} />
+                        <MyMetricsWidget currentUser={currentUser} totalPorsContributed={totalPorsContributed} porRequirement={porRequirement} />
                     </div>
-                </div>
-
-                {/* Section 2: Reproducibility History */}
-                <div className="space-y-4">
-                    <h2 className="text-2xl font-bold text-text dark:text-text-dark">Reproducibility History</h2>
+                    {/* Section 2: Reproducibility History */}
                     <ReproducibilityHistoryWidget projects={projects} currentUser={currentUser} onViewContributionDetails={onViewContributionDetails} />
                 </div>
 
@@ -697,9 +692,9 @@ export function ScientistDashboard({ projects, onSelectProject, onNewProject, cu
                         {discoverProjects.length === 0 && (
                             <div className="md:col-span-2 lg:col-span-3 xl:col-span-4 text-center py-16 px-6 border-2 border-dashed border-border dark:border-border-dark rounded-xl bg-cairn-gray-100 dark:bg-cairn-gray-800/50">
                                 <SearchIcon className="mx-auto h-12 w-12 text-text-secondary" />
-                                <h3 className="mt-4 text-xl font-semibold text-text dark:text-text-dark">No Active Projects to Review</h3>
+                                <h3 className="mt-4 text-xl font-semibold text-text dark:text-text-dark">No Active Projects to Reproduce</h3>
                                 <p className="mt-2 text-md text-text-secondary dark:text-text-dark-secondary">
-                                    Check back later to find new research to review and contribute to.
+                                    Check back later to find new research to reproduce and contribute to.
                                 </p>
                             </div>
                         )}
@@ -741,7 +736,7 @@ export function ScientistDashboard({ projects, onSelectProject, onNewProject, cu
                     </div>
                 </div>
                 <div>
-                    <h3 className="text-xl font-semibold text-text dark:text-text-dark mb-6">All My Projects</h3>
+                    <h3 className="text-xl font-semibold text-text dark:text-text-dark mb-6">My Projects</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                         <NewProjectCard 
                             onNewProject={onNewProject} 

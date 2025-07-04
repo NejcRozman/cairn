@@ -160,6 +160,7 @@ export const MOCK_PROJECTS: Project[] = [
         createReproducibility('rep-14', '2024-07-28', SCIENTIST_WALLET_ALICE, 'QmEvidence...14', 'Verified. The provided environment and model files work as expected.', PoRStatus.Success)
     ],
     fundingPool: 150000,
+    fundingPrice: 100,
     impactScore: 98,
     outputs: MOCK_OUTPUTS_PROJ_8,
     reproducibilityRequirements: REPRODUCIBILITY_TEMPLATES[ResearchDomain.Simulation],

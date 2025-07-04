@@ -3,7 +3,17 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { UserRole } from '../../lib/types';
-import { SunIcon, MoonIcon, WalletIcon, SearchIcon, BellIcon, ChevronDownIcon, UserCircleIcon, CheckIcon } from '../ui/icons';
+import {
+    SunIcon,
+    MoonIcon,
+    WalletIcon,
+    SearchIcon,
+    BellIcon,
+    ChevronDownIcon,
+    UserCircleIcon,
+    CheckIcon,
+    HomeIcon
+} from '../ui/icons';
 import { useAppContext } from '../../context/app-provider';
 import { AppLogo } from '../ui/logo';
 
@@ -100,6 +110,9 @@ export default function Header({ onNavigate }: { onNavigate: (page: string) => v
             </div>
 
             <div className="flex items-center space-x-2 sm:space-x-4">
+                    <button onClick={() => onNavigate('landing')} className="text-sm font-semibold text-text-secondary hover:text-primary dark:text-text-dark-secondary dark:hover:text-primary-light">
+                        Back to Landing Page
+                    </button>
                 <IconButton onClick={() => setIsDarkMode(!isDarkMode)}>
                     {isDarkMode ? <SunIcon className="w-5 h-5" /> : <MoonIcon className="w-5 h-5" />}
                 </IconButton>

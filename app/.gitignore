@@ -7,7 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+../../../cairn-new-front-end - Copy/app/node_modules
 dist
 dist-ssr
 *.local

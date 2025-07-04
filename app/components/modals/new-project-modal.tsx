@@ -123,6 +123,7 @@ export const NewProjectModal = ({
   const [organization, setOrganization] = useState("");
   const [additionalInfoUrl, setAdditionalInfoUrl] = useState("");
   const [tags, setTags] = useState("");
+  const [fundingPrice, setFundingPrice] = useState("");
 
   const [creationStatus, setCreationStatus] = useState<CreationStatus>("form");
   const [steps, setSteps] = useState<Step[]>([]);
@@ -134,18 +135,18 @@ export const NewProjectModal = ({
 
     const initialSteps: Step[] = [
       {
-        name: "1. Create Project Metadata",
-        description: "Storing project details on the smart contract.",
+        name: "1. Creating Impact Asset",
+        description: "",
         status: "active",
       },
       {
-        name: "2. Mint Hypercert",
-        description: "Generating the fractionalized impact certificate.",
+        name: "2. Transfer Approval",
+        description: "",
         status: "pending",
       },
       {
-        name: "3. Link Impact Assets",
-        description: "Connecting the project and Hypercert token ID.",
+        name: "3. Register Project",
+        description: "",
         status: "pending",
       },
     ];
@@ -218,6 +219,7 @@ export const NewProjectModal = ({
           .split("T")[0],
         lastOutputDate: "",
         reproducibilities: [],
+        fundingPrice: fundingPrice ? parseInt(fundingPrice, 10) : undefined,
         fundingGoal: 15000,
         fundingPool: 0,
         impactScore: 0,
@@ -313,6 +315,10 @@ export const NewProjectModal = ({
               />
             </div>
           </div>
+          <div>
+              <label className="block text-sm font-medium text-text-secondary dark:text-text-dark-secondary mb-1">Funding Goal (USD)</label>
+                <FormInput type="number" placeholder="e.g., 15000" value={fundingPrice} onChange={(e) => setFundingPrice(e.target.value)} />
+              </div>
           <div>
             <div className="flex items-start p-3 mb-3 text-sm rounded-lg bg-status-info-bg text-status-info dark:bg-status-info-bg-dark/50">
               <InfoIcon className="w-5 h-5 mr-3 flex-shrink-0 mt-0.5" />

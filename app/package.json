@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "../../../cairn-new-front-end - Copy/app/node_modules/.bin/vite",
+    "build": "../../../cairn-new-front-end - Copy/app/node_modules/.bin/vite build",
+    "preview": "../../../cairn-new-front-end - Copy/app/node_modules/.bin/vite preview"
   },
   "dependencies": {
     "@web3-storage/w3up-client": "^17.3.0",

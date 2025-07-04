@@ -103,6 +103,8 @@ export function App() {
     handleDispute,
     isAuthenticated,
     isOnboardingModalOpen,
+    forceShowLanding,
+    goToLandingPage,
   } = useAppContext();
 
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -181,6 +183,10 @@ export function App() {
   };
 
   const handleDashboardNavigation = (page: string) => {
+    if (page === 'landing') {
+      goToLandingPage();
+      return;
+    }
     setSelectedProject(null);
     setActiveDashboardPage(page);
   };
@@ -192,7 +198,7 @@ export function App() {
     );
   }, [userRole]);
 
-  if (!isAuthenticated) {
+  if (forceShowLanding || !isAuthenticated) {
     if (staticPage === "howitworks") {
       return (
         <HowItWorksPage onNavigate={() => handleStaticNavigate("landing")} />
@@ -264,10 +270,11 @@ export function App() {
         <AddOutputModal
           project={selectedProject}
           onClose={() => setIsAddOutputModalOpen(false)}
-          onAddOutputs={(outputs) => {
+          onAddOutputs={(outputs, price) => {
             const updatedProject = handleAddOutputs(
               selectedProject.id,
-              outputs
+              outputs,
+              price
             );
             setSelectedProject(updatedProject);
             setIsAddOutputModalOpen(false);
